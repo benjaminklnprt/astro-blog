@@ -2,29 +2,79 @@ media:
   input: public
   output: /
 content:
-  - name: posts
-    label: Posts
+  - name: pages
+    label: Pages
     type: collection
-    path: src/content/blog
+    path: '_pages'
     view:
-      fields: [ title, draft, date ]
+      fields: [ title, published ]
     fields:
-      - { name: author, label: Author, type: string }
-      - { name: pubDatetime, label: Date, type: date }
-      - { name: modDatetime, label: Date, type: date }
-      - { name: title, label: Title, type: string, required: true }
-      - { name: ogImage, label: Title, type: string }
-      - { name: slug, label: Slug, type: string }
-      - { name: featured, label: Featured, type: boolean }
-      - { name: draft, label: Draft, type: boolean }
-      - { name: tags, label: Tags, type: string, list: true }
-      - { name: description, label: Description, type: string }
-      - { name: body, label: Body, type: rich-text }
-  - name: about
-    label: About page
-    type: file
-    path: src/pages/about.md
-    fields:
-      - { name: layout, type: string, hidden: true, default: "../layouts/AboutLayout.astro" }
-      - { name: title, label: Title, type: string }
-      - { name: body, label: Body, type: rich-text, options: { input: public/assets, output: /assets } }
+      - name: published
+        label: Published
+        type: boolean
+        default: true
+      - name: title
+        label: Title
+        type: string
+      - name: content
+        label: Page Content
+        type: portable-text
+        marks:
+          decorators:
+            - title
+            - strong
+            - em
+            - underline
+            - strike-through
+        blocks:
+          - name: heading
+            type: object
+            fields:
+              - name: level
+                type: number
+                default: 2
+              - name: text
+                type: string
+          - name: image
+            type: object
+            fields:
+              - name: src
+                type: image
+              - name: alt
+                type: string
+              - name: caption
+                type: string
+          - name: quote
+            type: object
+            fields:
+              - name: text
+                type: text
+              - name: author
+                type: string
+          - name: callout
+            type: object
+            fields:
+              - name: type
+                type: select
+                options:
+                  - info
+                  - warning
+                  - success
+                  - error
+              - name: content
+                type: text
+          - name: code
+            type: object
+            fields:
+              - name: language
+                type: string
+              - name: code
+                type: text
+      
+      # Page-level metadata
+      - name: seo_title
+        label: SEO Title
+        type: string
+      - name: seo_description
+        label: SEO Description
+        type: text
